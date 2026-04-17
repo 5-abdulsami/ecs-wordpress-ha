@@ -37,3 +37,14 @@ module "wordpress" {
   db_password_arn    = module.database.db_password_arn
   db_name            = "wordpressdb"
 }
+
+module "monitoring" {
+  source                   = "./modules/monitoring"
+  alert_email              = var.alert_email
+  ecs_cluster_id           = module.compute.cluster_id
+  ecs_execution_role_arn   = module.compute.ecs_task_execution_role_arn
+  prometheus_task_role_arn = module.compute.prometheus_task_role_arn
+  private_subnet_ids       = module.networking.private_subnets
+  monitoring_sg_id         = module.networking.monitoring_sg_id
+  monitoring_efs_id        = module.compute.monitoring_efs_id
+}
